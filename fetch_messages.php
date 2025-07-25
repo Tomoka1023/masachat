@@ -22,15 +22,6 @@ function formatTimestamp($datetime) {
     $now = new DateTime();
     $time = new DateTime($datetime);
     return $time->format('n/j H:i');
-    // $diff = $now->getTimestamp() - $time->getTimestamp();
-
-    // if ($diff < 60) return 'たった今';
-    // elseif ($diff < 3600) return floor($diff / 60) . '分前';
-    // elseif ($diff < 86400) return floor($diff / 3600) . '時間前';
-    // elseif ($diff < 172800) return '昨日';
-    // elseif ($diff < 604800) return floor($diff / 86400) . '日前';
-    // elseif ($now->format('Y') === $time->format('Y')) return $time->format('n月j日');
-    // else return $time->format('Y年n月j日');
 }
 
 foreach ($messages as $msg) :
@@ -40,7 +31,7 @@ foreach ($messages as $msg) :
     $stmt = $pdo->prepare("SELECT display_name, icon FROM users WHERE id = ?");
     $stmt->execute([$msg['from_user']]);
     $user = $stmt->fetch();
-    $icon = $user['icon'] ? '/chat_app/' . $user['icon'] : 'chat_app/uploads/default.png';
+    $icon = $user['icon'] ? $user['icon'] : 'uploads/default.png';
     $formattedTime = formatTimestamp($msg['created_at']);
 
     echo "

@@ -64,7 +64,7 @@ $messages = $stmt->fetchAll();
 <head>
   <meta charset="UTF-8">
   <title>チャット</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <link rel="icon" href="favicon.ico" type="image/ico">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,12 +93,18 @@ $messages = $stmt->fetchAll();
 <script>
 function fetchMessages() {
     const to = document.getElementById('to_user_id').value;
+    const box = document.getElementById('chat-box');
+    const isAtBottom = box.scrollHeight - box.scrollTop <= box.clientHeight + 50;
+
     fetch(`fetch_messages.php?to=${to}`)
         .then(response => response.text())
         .then(data => {
-            document.getElementById('chat-box').innerHTML = data;
-            const box = document.getElementById('chat-box');
-            box.scrollTop = box.scrollHeight;
+            box.innerHTML = data;
+            if (isAtBottom) {
+                setTimeout(() => {
+                    box.scrollTop = box.scrollHeight;
+                }, 30);
+            }
         });
 }
 
